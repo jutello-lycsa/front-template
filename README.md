@@ -14,6 +14,15 @@ Start the development server with:
 npm start
 ```
 
+## Creating Sub-Apps from Template
+
+1. Go to the repository on GitHub.
+2. Click on "Use this template" to create a new repository based on this template.
+
+## Daily Sync Workflow
+
+This template includes a GitHub Actions workflow to sync changes from the template repository to sub-apps daily. The workflow creates a pull request if updates are available.
+
 ## Checklist for GitHub Configuration
 
 1. **Enable Dependabot Alerts and Security Updates**

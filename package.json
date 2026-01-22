@@ -5,6 +5,7 @@
     "react-scripts": "^3.4.4"
   },
   "scripts": {
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "ci": "npm test -- --watchAll=false && npm run build"

@@ -1,0 +1,41 @@
+name: Sync Template
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/jutello-lycsa/front-template.git
+          git fetch upstream
+
+      - name: Create or update sync branch
+        run: |
+          git checkout -B sync/front-template
+          git merge upstream/main --no-edit || true
+
+      - name: Push sync branch
+        run: |
+          git push origin sync/front-template --force
+
+      - name: Create or update PR
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: sync/front-template
+          title: "Sync with front-template"
+          body: "This PR keeps the repository in sync with the template repository."
