@@ -5,9 +5,17 @@ on:
     - cron: "*/10 * * * *"
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   sync:
     runs-on: ubuntu-latest
+    env:
+      UPSTREAM_REPO: jutello-lycsa/front-template
+      SYNC_TOKEN: ${{ secrets.SYNC_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout repository
@@ -20,7 +28,9 @@ jobs:
 
       - name: Add upstream remote
         run: |
-          git remote add upstream https://github.com/jutello-lycsa/front-template.git
+          git remote remove upstream || true
+          TOKEN="${SYNC_TOKEN:-$GITHUB_TOKEN}"
+          git remote add upstream "https://x-access-token:${TOKEN}@github.com/${UPSTREAM_REPO}.git"
           git fetch upstream
 
       - name: Create or update sync branch
