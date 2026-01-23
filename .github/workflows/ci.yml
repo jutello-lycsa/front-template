@@ -7,12 +7,14 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    env:
+      NODE_OPTIONS: --openssl-legacy-provider
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "16"
           cache: "npm"
 
       - run: npm ci
