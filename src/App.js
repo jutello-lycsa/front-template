@@ -4,7 +4,9 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <h1>Welcome to React 16 Template</h1>
+      <h1>PRIMER CAMBIO:
+        Versión 0.0.4
+      </h1>
     </div>
   );
 }
