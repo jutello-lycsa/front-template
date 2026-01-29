@@ -33,6 +33,9 @@ jobs:
           git remote add upstream "https://x-access-token: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@github.com/${UPSTREAM_REPO}.git"
           git fetch upstream
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Create or update sync branch
         run: |
           git checkout -B sync/front-template
