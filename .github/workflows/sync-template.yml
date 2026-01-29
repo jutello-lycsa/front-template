@@ -21,6 +21,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Detect base branch
+        run: |
+          BASE_BRANCH=$(git remote show origin | sed -n 's/.*HEAD branch: //p')
+          if [ -z "$BASE_BRANCH" ]; then BASE_BRANCH=main; fi
+          echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
+
       - name: Set up Git
         run: |
           git config user.name "github-actions[bot]"
@@ -59,13 +65,24 @@ jobs:
 
       - name: Checkout base branch
         run: |
-          git checkout "${{ github.event.repository.default_branch }}"
+          git checkout "$BASE_BRANCH"
+
+      - name: Check for changes to PR
+        run: |
+          git fetch origin "$BASE_BRANCH"
+          if git diff --quiet "origin/$BASE_BRANCH" "sync/front-template"; then
+            echo "HAS_CHANGES=false" >> $GITHUB_ENV
+            echo "::notice title=Sync Skipped::No differences between $BASE_BRANCH and sync/front-template"
+          else
+            echo "HAS_CHANGES=true" >> $GITHUB_ENV
+          fi
 
       - name: Create or update PR
         uses: peter-evans/create-pull-request@v5
+        if: env.HAS_CHANGES == 'true'
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          base: ${{ github.event.repository.default_branch }}
+          base: ${{ env.BASE_BRANCH }}
           branch: sync/front-template
           title: "Sync with front-template"
           body: "This PR keeps the repository in sync with the template repository."
