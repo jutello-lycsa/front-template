@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "18"
-          cache: "npm"
+          # cache removed because no lockfile is committed
 
-      - run: npm ci
+      - run: npm install
       - run: npm run build
