@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Detect base branch
         run: |
@@ -46,6 +48,12 @@ jobs:
             exit 0
           fi
 
+      - name: Detect upstream default branch
+        run: |
+          UPSTREAM_BRANCH=$(git remote show upstream | sed -n 's/.*HEAD branch: //p')
+          if [ -z "$UPSTREAM_BRANCH" ]; then UPSTREAM_BRANCH=main; fi
+          echo "UPSTREAM_BRANCH=$UPSTREAM_BRANCH" >> $GITHUB_ENV
+
       - name: Install dependencies
         run: |
           if [ ! -f package-lock.json ]; then
@@ -57,7 +65,7 @@ jobs:
       - name: Create or update sync branch
         run: |
           git checkout -B sync/front-template
-          git merge upstream/main --no-edit || true
+          git merge "upstream/$UPSTREAM_BRANCH" --no-edit || true
 
       - name: Push sync branch
         run: |
