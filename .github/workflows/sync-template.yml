@@ -65,7 +65,7 @@ jobs:
       - name: Create or update sync branch
         run: |
           git checkout -B sync/front-template
-          git merge "upstream/$UPSTREAM_BRANCH" --no-edit || true
+          git merge --no-edit --allow-unrelated-histories "upstream/$UPSTREAM_BRANCH" || true
 
       - name: Push sync branch
         run: |
