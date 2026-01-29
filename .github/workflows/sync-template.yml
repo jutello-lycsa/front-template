@@ -23,11 +23,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Detect base branch
+      - name: Set base branch from context
         run: |
-          BASE_BRANCH=$(git remote show origin | sed -n 's/.*HEAD branch: //p')
-          if [ -z "$BASE_BRANCH" ]; then BASE_BRANCH=main; fi
-          echo "BASE_BRANCH=$BASE_BRANCH" >> $GITHUB_ENV
+          echo "BASE_BRANCH=${{ github.event.repository.default_branch }}" >> $GITHUB_ENV
 
       - name: Set up Git
         run: |
