@@ -34,7 +34,12 @@ jobs:
           git fetch upstream
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          if [ ! -f package-lock.json ]; then
+            npm install
+          else
+            npm ci
+          fi
 
       - name: Create or update sync branch
         run: |
