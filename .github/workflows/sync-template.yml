@@ -72,12 +72,13 @@ jobs:
           TMP_DIR=$(mktemp -d)
           git -c advice.detachedHead=false clone --depth 1 --branch "$UPSTREAM_BRANCH" "$URL" "$TMP_DIR"
           rsync -a --delete \
-            --include 'build/***' \
             --include 'public/***' \
             --include 'src/***' \
             --include 'package.json' \
             --include 'README.md' \
             --include '.gitignore' \
+            --exclude 'node_modules/***' \
+            --exclude 'build/***' \
             --exclude '*' \
             "$TMP_DIR"/ .
           rm -rf "$TMP_DIR"
