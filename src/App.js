@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="App">
       <h1>PRIMER CAMBIO:
-        Versión 0.0.4
+        Versión 0.0.5
       </h1>
     </div>
   );
