@@ -57,10 +57,15 @@ jobs:
         run: |
           git push origin sync/front-template --force
 
+      - name: Checkout base branch
+        run: |
+          git checkout "${{ github.event.repository.default_branch }}"
+
       - name: Create or update PR
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          base: ${{ github.event.repository.default_branch }}
           branch: sync/front-template
           title: "Sync with front-template"
           body: "This PR keeps the repository in sync with the template repository."
