@@ -30,8 +30,15 @@ jobs:
         run: |
           git remote remove upstream || true
           TOKEN="${SYNC_TOKEN:-$GITHUB_TOKEN}"
-          git remote add upstream "https://x-access-token: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@github.com/${UPSTREAM_REPO}.git"
-          git fetch upstream
+          URL="https://x-access-token:${TOKEN}@github.com/${UPSTREAM_REPO}.git"
+          if git ls-remote "$URL" &>/dev/null; then
+            git remote add upstream "$URL"
+            git fetch upstream
+          else
+            echo "Upstream repo '$UPSTREAM_REPO' no accesible o no existe. Se omite la sincronización."
+            echo "::notice title=Sync Skipped::Upstream repository not found or access denied"
+            exit 0
+          fi
 
       - name: Install dependencies
         run: |
