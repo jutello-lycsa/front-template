@@ -14,7 +14,7 @@ Start the development server with:
 npm start
 ```
 
-VERSION: 0.0.13
+VERSION: 0.0.14
 
 ## Sync Workflow Setup
 - Add a repository secret `SYNC_TOKEN` (Personal Access Token) with `repo` scope or fine-grained access:
