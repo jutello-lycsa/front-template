@@ -22,7 +22,7 @@ permissions:
 
 jobs:
   sync:
-    if: github.ref != 'refs/heads/front-template'
+    if: github.repository != 'jutello-lycsa/front-template' && github.ref != 'refs/heads/front-template'
     name: Sync from upstream template
     runs-on: ubuntu-latest
 
