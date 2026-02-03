@@ -151,7 +151,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git push --force-with-lease origin "${SYNC_BRANCH}"
+          echo "Remote configuration:"
+          git remote -v
+          echo "Branch and status:"
+          git status --porcelain -b || true
+          echo "Attempting to push branch ${SYNC_BRANCH}"
+          if ! git push --force-with-lease origin "${SYNC_BRANCH}"; then
+            echo "Primary push failed; retrying without force and setting upstream..."
+            if ! git push -u origin "${SYNC_BRANCH}"; then
+              echo "::error::Push failed. Likely cause: token lacks 'contents: write' permission or branch protections reject the push."
+              echo "Ensure GITHUB_TOKEN has 'contents: write' and that branch protection does not block pushes to ${SYNC_BRANCH}."
+              exit 1
+            fi
+          fi
 
       # 9) Crear/actualizar PR mediante API (evita duplicados) y aplicar labels
       - name: Ensure jq installed
